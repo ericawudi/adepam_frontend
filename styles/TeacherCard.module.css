@@ -1,0 +1,24 @@
+.date{
+    display: flex;
+    justify-content: space-between;
+    /* background-color: red; */
+}
+.text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+            line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    padding-bottom: 8px;
+ }
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+}
+.avatar{
+    display: flex;
+    padding: 10px;
+}

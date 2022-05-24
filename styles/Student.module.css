@@ -1,0 +1,33 @@
+.main {
+    min-height: 80vh;
+}
+.title {
+    margin: 0;
+    line-height: 1.15;
+    font-size: 4rem;
+    padding-bottom: 2rem;
+    color: darkgrey;
+    text-align: center;
+  
+}
+.loading{
+    color: rgb(81, 81, 252);
+    margin-right: 10px;
+}
+.button{
+    padding: 15px;
+}
+.button2{
+    padding: 15px;
+    background-color: #00BCD4
+}
+.button2:hover{
+    background-color: #00BCD4
+}
+.noContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
+}

@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    flex: 1;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+.loading{
+    color: green;
+    margin-right: 10px;
+}
+.content{
+    font-size: 18px;
+}

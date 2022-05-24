@@ -1,0 +1,18 @@
+.button{
+    padding: 15px;
+    background-color: #00BCD4
+}
+.button2{
+    padding: 15px;
+}
+.button:hover{
+    background-color: #00BCD4
+}
+.input{
+    display: none;
+}
+.image{
+    height: 200px;
+    width: 440px;
+    border-radius: 5%
+}

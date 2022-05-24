@@ -1,0 +1,52 @@
+.container {
+  padding: 0 2rem;
+}
+
+.main {
+  min-height: 80vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+  padding-bottom: 2rem;
+  color: darkgrey;
+  text-align: center;
+
+}
+.numbers{
+    display: "flex";
+    flex: "1 0 auto";
+    justify-content: "space-between";
+}
+.teacherCard{
+  display: "flex";
+  justify-content: "space-between";
+  color: #ffffff;
+  background-color: rgb(236, 64, 122);
+}
+.studentCard{
+  display: "flex";
+  justify-content: "space-between";
+  color: #ffffff;
+  background-color: rgb(156, 39, 176)
+}
+.machineCard{
+  display: "flex";
+  justify-content: "space-between";
+  color: #ffffff;
+  background-color: rgb(3, 169, 244)
+}
