@@ -148,10 +148,7 @@ function Student() {
     getData("student");
     setLoadAll(false);
   };
-  const handleViewStudentDetails = async (e) => {
-    // console.log(e);
-    let fieldData = {};
-  };
+
   const options = {
     filterType: "dropdown",
     selectableRows: false,
@@ -162,7 +159,6 @@ function Student() {
       filename: "student_info_list.csv",
       separator: ",",
     },
-    // onRowClick: handleViewStudentDetails,
   };
 
   return (
@@ -176,7 +172,6 @@ function Student() {
                 id="search-student"
                 label="Enter stuident name to search"
                 variant="outlined"
-                name="search"
                 onChange={handleChange}
                 fullWidth
               />
@@ -222,8 +217,9 @@ function Student() {
         <Grid item md={4} justifyContent="flex-end" style={{ display: "flex" }}>
           <AddStudentModal />
         </Grid>
+        {/* from here */}
         <Grid item sm={12}>
-          {students.length > -1 ? (
+          {students.length > 0 ? (
             <MUIDataTable
               title={"Adepam Student List"}
               data={students}
@@ -233,7 +229,6 @@ function Student() {
           ) : (
             <div className={styles.noContent}>
               <GroupsIcon sx={{ fontSize: 200, color: "rgba(0, 0, 0, 0.1)" }} />
-
               <Typography variant="h5" color="text.secondary" component="div">
                 Search for students
               </Typography>
@@ -242,11 +237,12 @@ function Student() {
                 color="text.secondary"
                 component="div"
               >
-                Search for student by username or "See All Students"
+                Search for student by username or &quot;See All Students&quot;
               </Typography>
             </div>
           )}
         </Grid>
+        {/* to here */}
       </Grid>
     </main>
   );
