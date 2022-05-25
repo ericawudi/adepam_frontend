@@ -9,7 +9,6 @@ function Layout({ children, title }) {
     <div className={styles.container}>
       <Header {...title} />
       <DrawerMenu>{children}</DrawerMenu>
-      {/* <main className={styles.main}>{children}</main> */}
       <Footer />
     </div>
   );

@@ -25,8 +25,7 @@ export default routes;
 
 export const Constants = {
   App: {
-    BASE_API_URL:
-      "https://sms.nalosolutions.com:8888/eoawudi/smartcast_pageant/api/",
+    BASE_API_URL: "https://adepam.herokuapp.com/",
   },
 
   Routes: {

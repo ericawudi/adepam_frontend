@@ -22,7 +22,6 @@ const drawerWidth = 240;
 function DrawerMenu({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [modalState, setModalState] = React.useState(false);
-
   const router = useRouter();
 
   React.useEffect(() => {
@@ -62,9 +61,7 @@ function DrawerMenu({ children }) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-
-      <Header title={"props.titlsde"} handleDrawerToggle={handleDrawerToggle} />
-
+      <Header handleDrawerToggle={handleDrawerToggle} />
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -88,7 +85,6 @@ function DrawerMenu({ children }) {
           PaperProps={{
             sx: {
               backgroundColor: "#12005e",
-              //   backgroundColor: "#7c43bd",
               color: "#ffffff",
             },
           }}
@@ -107,7 +103,6 @@ function DrawerMenu({ children }) {
           PaperProps={{
             sx: {
               backgroundColor: "#12005e",
-              //   backgroundColor: "#7c43bd",
               color: "#ffffff",
             },
           }}

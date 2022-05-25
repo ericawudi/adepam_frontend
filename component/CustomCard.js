@@ -1,16 +1,10 @@
-import * as React from "react";
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
+import React from "react";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import styles from "../styles/TeacherCard.module.css";
+import styles from "../styles/CustomCard.module.css";
 
-function TeacherCard(props) {
-  const { name, picture, profile, dateEmployed } = props;
+function CustomCard(props) {
+  const { name, picture, profile, dateEmployed, dateDesc } = props;
   return (
     <div className={styles.avatar}>
       <Avatar
@@ -36,10 +30,12 @@ function TeacherCard(props) {
           component="div"
           className={styles.date}
         >
-          <div>Date Employed</div> <div>{dateEmployed}</div>
+          <div>{dateDesc}</div> <div>{dateEmployed}</div>
         </Typography>
+        {/* <hr /> */}
+        <hr style={{ width: "50%", textAlign: "left", marginLeft: 0 }}></hr>
       </div>
     </div>
   );
 }
-export default TeacherCard;
+export default CustomCard;

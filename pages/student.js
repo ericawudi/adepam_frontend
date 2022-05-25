@@ -6,39 +6,164 @@ import Typography from "@mui/material/Typography";
 import MUIDataTable from "mui-datatables";
 import AddStudentModal from "../component/AddStudentModal";
 import styles from "../styles/Student.module.css";
-const columns = ["Name", "Company", "City", "State"];
-
-const data = [
-  ["Joe James", "Test Corp", "Yonkers", "NY"],
-  ["John Walsh", "Test Corp", "Hartford", "CT"],
-  ["Bob Herm", "Test Corp", "Tampa", "FL"],
-  ["James Houston", "Test Corp", "Dallas", "TX"],
-];
-
-const options = {
-  filterType: "checkbox",
-};
+import { GetList } from "../services/authService";
+import EditStudentModal from "../component/EditStudentModal";
+import DeleteStudentModal from "../component/DeleteStudentModal";
 
 function Student() {
   const [loading, setLoading] = React.useState(false);
   const [loadAll, setLoadAll] = React.useState(false);
   const [students, setStudent] = React.useState([]);
+  const [rerender, setRerender] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+
+  const columns = [
+    {
+      name: "_id",
+      label: "ID",
+      options: {
+        filter: false,
+        sort: false,
+        display: false,
+      },
+    },
+    {
+      name: "name",
+      label: "Name",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "gardian",
+      label: "Gardian",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "contact",
+      label: "Contact No.",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "createdAt",
+      label: "Enrolled On",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "completionStatus",
+      label: "completionStatus",
+      options: {
+        filter: true,
+        sort: true,
+        display: false,
+      },
+    },
+    {
+      name: "email",
+      label: "Email",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "createdAt",
+      label: "Creation Date",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "action",
+      label: "Action",
+      options: {
+        filter: false,
+        customBodyRender: (value, tabeMetha) => {
+          let fieldData = {
+            id: tabeMetha.rowData[0],
+            name: tabeMetha.rowData[1],
+            gardian: tabeMetha.rowData[2],
+            contact: tabeMetha.rowData[3],
+            completionStatus: tabeMetha.rowData[5],
+            email: tabeMetha.rowData[6],
+          };
+          return (
+            <div style={{ display: "flex" }}>
+              <EditStudentModal
+                data={fieldData}
+                handleReRender={handleReRender}
+              />
+              <DeleteStudentModal
+                data={tabeMetha.rowData}
+                handleReRender={handleReRender}
+              />
+            </div>
+          );
+        },
+      },
+    },
+  ];
+
+  const handleReRender = () => {
+    setRerender(!rerender);
+  };
+
+  const handleChange = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const getData = async (route) => {
+    const resp = await GetList(route);
+    console.log({ resp });
+    if (resp.status == 200) {
+      setStudent(resp.data);
+    } else {
+      console.log(`Errow fetching ${route} data`);
+    }
+  };
+
+  React.useEffect(() => {
+    getData("student");
+  }, [rerender]);
 
   const handleSearch = () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    getData(`student/${search}`);
+    setLoading(false);
   };
 
   const handleSelect = () => {
     setLoadAll(true);
-    setTimeout(() => {
-      setLoadAll(false);
-    }, 2000);
+    getData("student");
+    setLoadAll(false);
   };
-
-  const addStudent = () => {};
+  const handleViewStudentDetails = async (e) => {
+    // console.log(e);
+    let fieldData = {};
+  };
+  const options = {
+    filterType: "dropdown",
+    selectableRows: false,
+    responsive: "standard",
+    selectableRows: "none",
+    viewColumns: true,
+    downloadOptions: {
+      filename: "student_info_list.csv",
+      separator: ",",
+    },
+    // onRowClick: handleViewStudentDetails,
+  };
 
   return (
     <main className={styles.main}>
@@ -48,9 +173,11 @@ function Student() {
           <Grid container spacing={2}>
             <Grid item md={6}>
               <TextField
-                id="outlined-basic"
+                id="search-student"
                 label="Enter stuident name to search"
                 variant="outlined"
+                name="search"
+                onChange={handleChange}
                 fullWidth
               />
             </Grid>
@@ -96,10 +223,10 @@ function Student() {
           <AddStudentModal />
         </Grid>
         <Grid item sm={12}>
-          {students.length > -0 ? (
+          {students.length > -1 ? (
             <MUIDataTable
-              title={"Employee List"}
-              data={data}
+              title={"Adepam Student List"}
+              data={students}
               columns={columns}
               options={options}
             />

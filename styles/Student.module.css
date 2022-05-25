@@ -31,3 +31,7 @@
     align-items: center;
     margin-top: 60px;
 }
+.action{
+    display: flex;
+    
+}

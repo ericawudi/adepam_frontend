@@ -1,10 +1,5 @@
 import Link from "next/link";
-// import {
-//   Dashboard,
-//   ,
-//   ,
-//   ,
-// } from ""@mui/icons-material"";
+
 import Dashboard from "@mui/icons-material/Dashboard";
 import SchoolIcon from "@mui/icons-material/School";
 import StarIcon from "@mui/icons-material/Star";
@@ -39,13 +34,13 @@ function Routes(props) {
           </ListItemButton>
         </ListItem>
       </Link>
-      <Link href="/level">
+      {/* <Link href="/teacher">
         <ListItem disablePadding className={styles.main}>
           <ListItemButton onClick={props.handleDrawerToggle}>
             <ListItemIcon>
               <StarIcon className={styles.icons} />
             </ListItemIcon>
-            <ListItemText primary="Level" />
+            <ListItemText primary="Teacher" />
           </ListItemButton>
         </ListItem>
       </Link>
@@ -58,7 +53,7 @@ function Routes(props) {
             <ListItemText primary="Profile" />
           </ListItemButton>
         </ListItem>
-      </Link>
+      </Link> */}
     </List>
   );
 }

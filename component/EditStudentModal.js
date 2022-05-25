@@ -5,15 +5,13 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { useForm } from "react-hook-form";
 import { Divider, Grid, MenuItem } from "@mui/material";
-import styles from "../styles/AddStudentModal.module.css";
-import Image from "next/image";
-import { CreateUser } from "../services/authService";
+import { EditDetails } from "../services/authService";
 
-function AddStudentModal() {
+function EditStudentModal(props) {
   const [open, setOpen] = React.useState(false);
   const [level] = React.useState([
     { value: 100, label: "Level 100" },
@@ -27,7 +25,6 @@ function AddStudentModal() {
     { value: "stopped", label: "Stopped" },
   ]);
   const [selectedStatus, setSelectedStatus] = React.useState("active");
-  const [image, setImage] = React.useState(null);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -44,38 +41,31 @@ function AddStudentModal() {
     setSelectedStatus(event.target.value);
   };
 
-  const handleLogoUpload = (event) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  };
-  React.useEffect(() => {
-    console.log(image);
-  }, [image]);
-
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
+
   const onSubmit = async (data) => {
-    const studentData = { ...data, image: image };
-    const resp = await CreateUser(studentData, "student");
-    console.log({ resp });
+    const resp = await EditDetails(`student/${props.data.id}`, data);
+    if (resp.status === 200) {
+      props.handleReRender();
+      setOpen(false);
+    }
   };
+
+  React.useEffect(() => {
+    reset(props.data);
+  }, [props.data]);
 
   return (
     <div>
-      <Button
-        startIcon={<PersonAddAltIcon />}
-        variant="contained"
-        className={styles.button}
-        onClick={handleClickOpen}
-      >
-        New Student
-      </Button>
+      <IconButton onClick={handleClickOpen}>
+        <EditIcon />
+      </IconButton>
+
       <Dialog open={open} onClose={handleClose}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle>Add Student</DialogTitle>
@@ -84,7 +74,7 @@ function AddStudentModal() {
             <Grid container spacing={2}>
               <Grid item sm={4}>
                 <TextField
-                  id="name"
+                  id="fullname"
                   label="Enter fullname"
                   variant="outlined"
                   name="name"
@@ -162,43 +152,11 @@ function AddStudentModal() {
                   ))}
                 </TextField>
               </Grid>
-              <Grid item xs={4}>
-                <label htmlFor="upload-student-image">
-                  <input
-                    accept="image/*"
-                    className={styles.input}
-                    id="upload-student-image"
-                    type="file"
-                    onChange={handleLogoUpload}
-                  />
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    component="span"
-                    className={styles.button2}
-                    endIcon={<CloudUploadIcon />}
-                  >
-                    Choose Image
-                  </Button>
-                </label>
-              </Grid>
-              {/* Student Image Display */}
-              <Grid item xs={12}>
-                {image && (
-                  <Image
-                    src={image}
-                    width={200}
-                    height={200}
-                    className={styles.image}
-                    layout="intrinsic"
-                  />
-                )}
-              </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit(onSubmit)}>Create Student</Button>
+            <Button onClick={handleSubmit(onSubmit)}>Edit Student</Button>
           </DialogActions>
         </form>
       </Dialog>
@@ -206,4 +164,4 @@ function AddStudentModal() {
   );
 }
 
-export default AddStudentModal;
+export default EditStudentModal;

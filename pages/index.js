@@ -1,3 +1,4 @@
+import React from "react";
 import { Divider, Grid } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -6,11 +7,47 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import GroupsIcon from "@mui/icons-material/Groups";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 import CountUp from "react-countup";
-import TeacherCard from "../component/teacherCard";
+import CustomCard from "../component/CustomCard";
 
 import styles from "../styles/Home.module.css";
+import { GetList } from "../services/authService";
 
 export default function Home() {
+  const [studentData, setStudentData] = React.useState(null);
+  const [teacherData, setTeacherData] = React.useState(null);
+  const [procurementData, setProcurementData] = React.useState(null);
+
+  const getData = async (route) => {
+    const resp = await GetList(route);
+    console.log({ resp });
+    if (resp.status == 200) {
+      switch (route) {
+        case "student":
+          setStudentData(resp.data);
+          break;
+        case "teacher":
+          setTeacherData(resp.data);
+          break;
+        case "procure":
+          setProcurementData(resp.data);
+          break;
+        default:
+          break;
+      }
+    } else {
+      console.log(`Errow fetching ${route} data`);
+    }
+  };
+  React.useEffect(() => {
+    getData("student");
+  }, []);
+  React.useEffect(() => {
+    getData("teacher");
+  }, []);
+  React.useEffect(() => {
+    getData("procure");
+  }, []);
+
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Adepam Dashboard</h1>
@@ -26,7 +63,7 @@ export default function Home() {
           >
             <CardContent className={styles.numbers}>
               <Typography variant="h5" component="div">
-                <CountUp end={100} duration={3} />
+                <CountUp end={teacherData && teacherData.length} duration={1} />
               </Typography>
               <Typography variant="h5" component="div">
                 Number of Teachers
@@ -45,7 +82,7 @@ export default function Home() {
           >
             <CardContent className={styles.numbers}>
               <Typography variant="h5" component="div">
-                <CountUp end={100} duration={3} />
+                <CountUp end={studentData && studentData.length} duration={1} />
               </Typography>
               <Typography variant="h5" component="div">
                 Number of Student
@@ -57,16 +94,18 @@ export default function Home() {
         <Grid item md={4}>
           <Paper
             elevation={10}
-            className={styles.machineCard}
+            className={styles.procurementCard}
             sx={{ display: "flex", justifyContent: "space-between" }}
           >
             <CardContent className={styles.numbers}>
               <Typography variant="h5" component="div">
-                Fit: <CountUp end={100} duration={3} /> | Faulty:{" "}
-                <CountUp end={10} duration={1} />
+                <CountUp
+                  end={procurementData && procurementData.length}
+                  duration={1}
+                />
               </Typography>
               <Typography variant="h5" component="div">
-                Machines
+                Procurement
               </Typography>
             </CardContent>
             <PrecisionManufacturingIcon
@@ -86,12 +125,21 @@ export default function Home() {
             Latest Teachers
           </Typography>
           <Paper elevation={2}>
-            <TeacherCard
-              name="Eric Awudi"
-              picture="logo.png"
-              profile="This is our best techer. dkjfhgdnfnkdlsmfdlsjf"
-              dateEmployed="12/12/12"
-            />
+            {teacherData &&
+              teacherData.map((teacher, index) => {
+                if (index < 5) {
+                  return (
+                    <CustomCard
+                      key={teacher._id}
+                      name={teacher.name}
+                      picture={teacher.image}
+                      profile={teacher.profile}
+                      dateEmployed={teacher.createdAt.slice(0, 10)}
+                      dateDesc="Date Employed"
+                    />
+                  );
+                }
+              })}
             <Divider />
           </Paper>
         </Grid>
@@ -104,12 +152,21 @@ export default function Home() {
             Newest Students
           </Typography>
           <Paper elevation={2}>
-            <TeacherCard
-              name="Eric Awudi"
-              picture="logo.png"
-              profile="This is our best techer. dkjfhgdnfnkdlsmfdlsjf"
-              dateEmployed="12/12/12"
-            />
+            {studentData &&
+              studentData.map((student, index) => {
+                if (index < 5) {
+                  return (
+                    <CustomCard
+                      key={student._id}
+                      name={student.name}
+                      picture={student.image}
+                      profile={student.name}
+                      dateEmployed={student.createdAt.slice(0, 10)}
+                      dateDesc="Date Enrolled"
+                    />
+                  );
+                }
+              })}
             <Divider />
           </Paper>
         </Grid>
@@ -119,15 +176,24 @@ export default function Home() {
             color="text.secondary"
             component="div"
           >
-            Machines
+            Procurement
           </Typography>
           <Paper elevation={2}>
-            <TeacherCard
-              name="Eric Awudi"
-              picture="logo.png"
-              profile="This is our best techer. dkjfhgdnfnkdlsmfdlsjf"
-              dateEmployed="12/12/12"
-            />
+            {procurementData &&
+              procurementData.map((item, index) => {
+                if (index < 5) {
+                  return (
+                    <CustomCard
+                      key={item._id}
+                      name={item.name}
+                      picture={item.image}
+                      profile={item.profile}
+                      dateEmployed={item.createdAt.slice(0, 10)}
+                      dateDesc="Date Procured"
+                    />
+                  );
+                }
+              })}
             <Divider />
           </Paper>
         </Grid>

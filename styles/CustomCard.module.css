@@ -1,7 +1,6 @@
 .date{
     display: flex;
     justify-content: space-between;
-    /* background-color: red; */
 }
 .text {
     overflow: hidden;
@@ -14,6 +13,7 @@
  }
 .content{
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: space-between;
     padding: 10px;
@@ -21,4 +21,5 @@
 .avatar{
     display: flex;
     padding: 10px;
+    /* justify-content: space-between; */
 }
