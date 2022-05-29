@@ -9,7 +9,7 @@ function CustomCard(props) {
     <div className={styles.avatar}>
       <Avatar
         alt={name}
-        src={`/${picture}`}
+        src={picture}
         sx={{ width: 70, height: 70 }}
         children={`${name.split(" ")[0][0]}${
           name.split(" ")[1] ? name.split(" ")[1][0] : ""
@@ -32,8 +32,6 @@ function CustomCard(props) {
         >
           <div>{dateDesc}</div> <div>{dateEmployed}</div>
         </Typography>
-        {/* <hr /> */}
-        <hr style={{ width: "50%", textAlign: "left", marginLeft: 0 }}></hr>
       </div>
     </div>
   );

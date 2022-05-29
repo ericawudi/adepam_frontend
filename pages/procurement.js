@@ -1,25 +1,26 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
-import GroupsIcon from "@mui/icons-material/Groups";
 import { Button, CircularProgress, Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import MUIDataTable from "mui-datatables";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 import styles from "../styles/Student.module.css";
 import { GetList } from "../services/authService";
-import AddStudentModal from "../component/Modal/AddStudentModal";
-import EditStudentModal from "../component/Modal/EditStudentModal";
 import DeleteModal from "../component/Modal/DeleteModal";
 import Notification from "../component/Notification";
+import EditProcurementModal from "../component/Modal/EditProcurement";
+import AddItemModal from "../component/Modal/AddItemModal";
 
-function Student() {
+function Procurement() {
   const [loading, setLoading] = React.useState(false);
-  const [students, setStudent] = React.useState([]);
+  const [items, setItems] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [notif, setNotif] = React.useState({
     message: "This is an information message!",
     severity: "info",
     open: false,
   });
+
   const columns = [
     {
       name: "_id",
@@ -31,57 +32,27 @@ function Student() {
       },
     },
     {
-      name: "name",
-      label: "Name",
+      name: "model",
+      label: "Model",
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: "contact",
-      label: "Contact No.",
+      name: "condition",
+      label: "Condition",
       options: {
         filter: true,
         sort: true,
+        customBodyRender: (value) => {
+          return <div>{value ? "Active" : "Faulty"}</div>;
+        },
       },
     },
     {
-      name: "level",
-      label: "Level",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "gardian",
-      label: "Gardian",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "createdAt",
-      label: "Enrolled On",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "completionStatus",
-      label: "completionStatus",
-      options: {
-        filter: true,
-        sort: true,
-        display: true,
-      },
-    },
-    {
-      name: "email",
-      label: "Email",
+      name: "description",
+      label: "Item description",
       options: {
         filter: true,
         sort: true,
@@ -89,7 +60,15 @@ function Student() {
     },
     {
       name: "createdAt",
-      label: "Creation Date",
+      label: "Entry Date",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "updatedAt",
+      label: "Last Edited Date",
       options: {
         filter: true,
         sort: true,
@@ -101,22 +80,20 @@ function Student() {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta) => {
-          // this is being used and not tableMeta 'cos of the base64 image
-          // It's not part of the table but want to make it editable
-          const dataToEdit = students.filter(
-            (student) => student._id == tableMeta.rowData[0]
+          const dataToEdit = items.filter(
+            (item) => item._id == tableMeta.rowData[0]
           );
 
           return (
             <div style={{ display: "flex" }}>
-              <EditStudentModal
+              <EditProcurementModal
                 data={dataToEdit[0]}
                 handleReRender={handleReRender}
                 handleNotification={handleNotification}
               />
               <DeleteModal
                 data={tableMeta.rowData}
-                route="student"
+                route="procure"
                 handleReRender={handleReRender}
                 handleNotification={handleNotification}
               />
@@ -128,7 +105,7 @@ function Student() {
   ];
 
   const handleReRender = () => {
-    getData("student");
+    getData("procure");
   };
 
   const handleNotifClose = (event, reason) => {
@@ -153,7 +130,7 @@ function Student() {
     const resp = await GetList(route);
     console.log({ resp });
     if (resp.status == 200) {
-      setStudent(resp.data);
+      setItems(resp.data);
     } else {
       handleNotification({
         message: "Error in fetching data",
@@ -166,17 +143,17 @@ function Student() {
   };
 
   React.useEffect(() => {
-    getData("student");
+    getData("procure");
   }, []);
 
   const handleSearch = () => {
     if (search.length > 0) {
-      getData(`student/${search}`);
+      getData(`procure/${search}`);
     }
   };
 
   const handleSelect = () => {
-    getData("student");
+    getData("procure");
   };
 
   const options = {
@@ -186,21 +163,21 @@ function Student() {
     selectableRows: "none",
     viewColumns: true,
     downloadOptions: {
-      filename: "student_info_list.csv",
+      filename: "procure_info_list.csv",
       separator: ",",
     },
   };
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.title}>Student Management</h1>
+      <h1 className={styles.title}>Procurement Management</h1>
       <Grid container spacing={2} justifyContent="space-between">
         <Grid item md={8}>
           <Grid container spacing={2}>
             <Grid item md={6}>
               <TextField
-                id="search-student"
-                label="Enter student name to search"
+                id="search-procure"
+                label="Enter item name to search"
                 variant="outlined"
                 onChange={handleChange}
                 fullWidth
@@ -232,44 +209,46 @@ function Student() {
                 className={styles.button}
                 onClick={handleSelect}
               >
-                All Students
+                All Items
               </Button>
             </Grid>
           </Grid>
         </Grid>
         <Grid item md={4} justifyContent="flex-end" style={{ display: "flex" }}>
-          <AddStudentModal
+          <AddItemModal
             handleReRender={handleReRender}
             handleNotification={handleNotification}
           />
         </Grid>
         <Grid item sm={12}>
-          {students.length > 0 ? (
+          {items.length > 0 ? (
             <MUIDataTable
-              title={"Adepam Student List"}
-              data={students}
+              title={"Adepam Procurement List"}
+              data={items}
               columns={columns}
               options={options}
             />
           ) : (
             <div className={styles.noContent}>
-              <GroupsIcon sx={{ fontSize: 200, color: "rgba(0, 0, 0, 0.1)" }} />
+              <PrecisionManufacturingIcon
+                sx={{ fontSize: 200, color: "rgba(0, 0, 0, 0.1)" }}
+              />
               <Typography variant="h5" color="text.secondary" component="div">
-                Search for students
+                Search for an item
               </Typography>
               <Typography
                 variant="subtitle1"
                 color="text.secondary"
                 component="div"
               >
-                Search for student by username or &quot;See All Students&quot;
+                Search for an item by model or &quot;See All Items&quot;
               </Typography>
               <Typography
                 variant="subtitle1"
                 color="text.secondary"
                 component="div"
               >
-                Click the New Teacher button to create a student
+                Click the New Item button to create a item
               </Typography>
             </div>
           )}
@@ -285,4 +264,4 @@ function Student() {
   );
 }
 
-export default Student;
+export default Procurement;

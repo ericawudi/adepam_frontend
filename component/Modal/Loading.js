@@ -1,7 +1,7 @@
 import { CircularProgress, Dialog, Grid } from "@mui/material";
 import { useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import styles from "../styles/Loading.module.css";
+import styles from "../../styles/Loading.module.css";
 
 function Loading({ modelState = true }) {
   const theme = useTheme();

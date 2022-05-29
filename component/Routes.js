@@ -3,7 +3,8 @@ import Link from "next/link";
 import Dashboard from "@mui/icons-material/Dashboard";
 import SchoolIcon from "@mui/icons-material/School";
 import StarIcon from "@mui/icons-material/Star";
-import ManageAccounts from "@mui/icons-material/ManageAccounts";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -34,26 +35,27 @@ function Routes(props) {
           </ListItemButton>
         </ListItem>
       </Link>
-      {/* <Link href="/teacher">
+      <Link href="/teacher">
         <ListItem disablePadding className={styles.main}>
           <ListItemButton onClick={props.handleDrawerToggle}>
             <ListItemIcon>
-              <StarIcon className={styles.icons} />
+              <AdminPanelSettingsIcon className={styles.icons} />
             </ListItemIcon>
             <ListItemText primary="Teacher" />
           </ListItemButton>
         </ListItem>
       </Link>
-      <Link href="/profile">
+
+      <Link href="/procurement">
         <ListItem disablePadding className={styles.main}>
           <ListItemButton onClick={props.handleDrawerToggle}>
             <ListItemIcon>
-              <ManageAccounts className={styles.icons} />
+              <PrecisionManufacturingIcon className={styles.icons} />
             </ListItemIcon>
-            <ListItemText primary="Profile" />
+            <ListItemText primary="Procurement" />
           </ListItemButton>
         </ListItem>
-      </Link> */}
+      </Link>
     </List>
   );
 }

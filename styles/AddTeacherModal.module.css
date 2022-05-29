@@ -3,7 +3,8 @@
     background-color: #00BCD4
 }
 .button2{
-    padding: 15px;
+    padding: 10px;
+    margin: 2px;
 }
 .button:hover{
     background-color: #00BCD4
@@ -12,7 +13,7 @@
     display: none;
 }
 .image{
-    border-radius: 5%
+    border-radius: 5%;
 }
 .loading{
     color: rgb(81, 81, 252);

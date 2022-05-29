@@ -6,7 +6,7 @@ import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import { useRouter } from "next/router";
 import Header from "./Header";
-import Loading from "./Loading";
+import Loading from "./Modal/Loading";
 import style from "../styles/Drawer.module.css";
 import Routes from "./Routes";
 

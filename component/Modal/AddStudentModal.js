@@ -8,13 +8,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useForm } from "react-hook-form";
-import { Divider, Grid, MenuItem } from "@mui/material";
-import styles from "../styles/AddStudentModal.module.css";
+import { CircularProgress, Divider, Grid, MenuItem } from "@mui/material";
+import styles from "../../styles/AddStudentModal.module.css";
 import Image from "next/image";
-import { CreateUser } from "../services/authService";
+import { CreateUser } from "../../services/authService";
 
-function AddStudentModal() {
+function AddStudentModal(props) {
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [level] = React.useState([
     { value: 100, label: "Level 100" },
     { value: 200, label: "Level 200" },
@@ -51,19 +52,36 @@ function AddStudentModal() {
     };
     reader.readAsDataURL(event.target.files[0]);
   };
-  React.useEffect(() => {
-    console.log(image);
-  }, [image]);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
     const studentData = { ...data, image: image };
+    setLoading(true);
+    let message = "Teacher successfully created";
+    let severity = "success";
     const resp = await CreateUser(studentData, "student");
-    console.log({ resp });
+    if (resp.status == 200) {
+      props.handleReRender();
+      reset();
+      setImage(null);
+      setSelectLevel(100);
+      setSelectedStatus("active");
+    } else {
+      message = "Error creating teacher.";
+      severity = "error";
+    }
+    props.handleNotification({
+      message,
+      open: true,
+      severity,
+    });
+    setOpen(false);
+    setLoading(false);
   };
 
   return (
@@ -82,7 +100,7 @@ function AddStudentModal() {
           <Divider />
           <DialogContent>
             <Grid container spacing={2}>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   id="name"
                   label="Enter fullname"
@@ -94,7 +112,7 @@ function AddStudentModal() {
                   fullWidth
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   id="gardian"
                   label="Gardian Name"
@@ -106,19 +124,25 @@ function AddStudentModal() {
                   fullWidth
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   id="email"
                   label="Enter Email"
                   variant="outlined"
                   name="email"
                   type="email"
-                  {...register("email", { required: true })}
+                  {...register("email", {
+                    required: true,
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: "Entered value does not match email format",
+                    },
+                  })}
                   error={errors.email && true}
                   fullWidth
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   id="contact"
                   label="Contact No."
@@ -130,7 +154,7 @@ function AddStudentModal() {
                   error={errors.contact && true}
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   select
                   label="Select Level"
@@ -146,7 +170,7 @@ function AddStudentModal() {
                   ))}
                 </TextField>
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   select
                   label="Completion Status"
@@ -162,7 +186,7 @@ function AddStudentModal() {
                   ))}
                 </TextField>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <label htmlFor="upload-student-image">
                   <input
                     accept="image/*"
@@ -197,8 +221,19 @@ function AddStudentModal() {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit(onSubmit)}>Create Student</Button>
+            <Button onClick={handleClose} disabled={loading}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit(onSubmit)} disabled={loading}>
+              {loading && (
+                <CircularProgress
+                  color="secondary"
+                  className={styles.loading}
+                  size={20}
+                />
+              )}{" "}
+              Create Student
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

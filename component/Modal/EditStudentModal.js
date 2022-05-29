@@ -1,18 +1,22 @@
 import React from "react";
+import Image from "next/image";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { IconButton } from "@mui/material";
+import { CircularProgress, IconButton } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import EditIcon from "@mui/icons-material/Edit";
 import { useForm } from "react-hook-form";
+import styles from "../../styles/AddStudentModal.module.css";
 import { Divider, Grid, MenuItem } from "@mui/material";
-import { EditDetails } from "../services/authService";
+import { EditDetails } from "../../services/authService";
 
 function EditStudentModal(props) {
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [level] = React.useState([
     { value: 100, label: "Level 100" },
     { value: 200, label: "Level 200" },
@@ -25,6 +29,7 @@ function EditStudentModal(props) {
     { value: "stopped", label: "Stopped" },
   ]);
   const [selectedStatus, setSelectedStatus] = React.useState("active");
+  const [image, setImage] = React.useState(null);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -49,16 +54,58 @@ function EditStudentModal(props) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const resp = await EditDetails(`student/${props.data.id}`, data);
-    if (resp.status === 200) {
+    const dataToSave = {
+      name: data.name,
+      completionStatus: data.completionStatus,
+      contact: data.contact,
+      cwa: data.cwa,
+      email: data.email,
+      gardian: data.gardian,
+      level: data.level,
+      image: image,
+    };
+    console.log({ dataToSave });
+    // if (resp.status === 200) {
+    //   props.handleReRender();
+    //   setOpen(false);
+    // }
+    setLoading(true);
+    let message = "Student details successfully edited";
+    let severity = "success";
+    const resp = await EditDetails(`student/${data._id}`, dataToSave);
+    if (resp.status == 200) {
       props.handleReRender();
-      setOpen(false);
+      reset();
+      setImage(null);
+      setSelectLevel(100);
+      setSelectedStatus("active");
+    } else {
+      message = "Error editing student.";
+      severity = "error";
     }
+    props.handleNotification({
+      message,
+      open: true,
+      severity,
+    });
+    setOpen(false);
+    setLoading(false);
   };
 
   React.useEffect(() => {
     reset(props.data);
+    setSelectLevel(props.data.level);
+    setSelectedStatus(props.data.completionStatus);
+    setImage(props.data.image);
   }, [props.data]);
+
+  const handleLogoUpload = (event) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
 
   return (
     <div>
@@ -72,7 +119,7 @@ function EditStudentModal(props) {
           <Divider />
           <DialogContent>
             <Grid container spacing={2}>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   id="fullname"
                   label="Enter fullname"
@@ -84,7 +131,7 @@ function EditStudentModal(props) {
                   fullWidth
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   id="gardian"
                   label="Gardian Name"
@@ -96,7 +143,7 @@ function EditStudentModal(props) {
                   fullWidth
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   id="email"
                   label="Enter Email"
@@ -108,7 +155,7 @@ function EditStudentModal(props) {
                   fullWidth
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   id="contact"
                   label="Contact No."
@@ -120,7 +167,19 @@ function EditStudentModal(props) {
                   error={errors.contact && true}
                 />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
+                <TextField
+                  id="cwa"
+                  label="CWA"
+                  name="cwa"
+                  type="number"
+                  fullWidth
+                  variant="outlined"
+                  {...register("cwa", { required: true })}
+                  error={errors.cwa && true}
+                />
+              </Grid>
+              <Grid item sm={6}>
                 <TextField
                   select
                   label="Select Level"
@@ -136,7 +195,7 @@ function EditStudentModal(props) {
                   ))}
                 </TextField>
               </Grid>
-              <Grid item sm={4}>
+              <Grid item sm={6}>
                 <TextField
                   select
                   label="Completion Status"
@@ -152,11 +211,53 @@ function EditStudentModal(props) {
                   ))}
                 </TextField>
               </Grid>
+              <Grid item xs={6}>
+                <label htmlFor="upload-student-image">
+                  <input
+                    accept="image/*"
+                    className={styles.input}
+                    id="upload-student-image"
+                    type="file"
+                    onChange={handleLogoUpload}
+                  />
+                  {/* Student Image Display */}
+                  {image && (
+                    <Image
+                      src={image}
+                      width={200}
+                      height={200}
+                      className={styles.image}
+                      layout="responsive"
+                    />
+                  )}
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    component="span"
+                    className={styles.button2}
+                    endIcon={<CloudUploadIcon />}
+                  >
+                    Choose Image
+                  </Button>
+                </label>
+              </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit(onSubmit)}>Edit Student</Button>
+            <Button onClick={handleClose} disabled={loading}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit(onSubmit)} disabled={loading}>
+              {" "}
+              {loading && (
+                <CircularProgress
+                  color="secondary"
+                  className={styles.loading}
+                  size={20}
+                />
+              )}{" "}
+              Edit Student
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

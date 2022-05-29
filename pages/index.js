@@ -8,7 +8,6 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 import CountUp from "react-countup";
 import CustomCard from "../component/CustomCard";
-
 import styles from "../styles/Home.module.css";
 import { GetList } from "../services/authService";
 
@@ -129,14 +128,16 @@ export default function Home() {
               teacherData.map((teacher, index) => {
                 if (index < 5) {
                   return (
-                    <CustomCard
-                      key={teacher._id}
-                      name={teacher.name}
-                      picture={teacher.image}
-                      profile={teacher.profile}
-                      dateEmployed={teacher.createdAt.slice(0, 10)}
-                      dateDesc="Date Employed"
-                    />
+                    <div key={teacher._id}>
+                      <CustomCard
+                        name={teacher.name}
+                        picture={teacher.image}
+                        profile={teacher.profile}
+                        dateEmployed={teacher.createdAt.slice(0, 10)}
+                        dateDesc="Date Employed"
+                      />
+                      <Divider />
+                    </div>
                   );
                 }
               })}
@@ -156,18 +157,19 @@ export default function Home() {
               studentData.map((student, index) => {
                 if (index < 5) {
                   return (
-                    <CustomCard
-                      key={student._id}
-                      name={student.name}
-                      picture={student.image}
-                      profile={student.name}
-                      dateEmployed={student.createdAt.slice(0, 10)}
-                      dateDesc="Date Enrolled"
-                    />
+                    <div key={student._id}>
+                      <CustomCard
+                        name={student.name}
+                        picture={student.image}
+                        profile={student.name}
+                        dateEmployed={student.createdAt.slice(0, 10)}
+                        dateDesc="Date Enrolled"
+                      />
+                      <Divider />
+                    </div>
                   );
                 }
               })}
-            <Divider />
           </Paper>
         </Grid>
         <Grid item md={4}>
@@ -183,14 +185,17 @@ export default function Home() {
               procurementData.map((item, index) => {
                 if (index < 5) {
                   return (
-                    <CustomCard
-                      key={item._id}
-                      name={item.name}
-                      picture={item.image}
-                      profile={item.profile}
-                      dateEmployed={item.createdAt.slice(0, 10)}
-                      dateDesc="Date Procured"
-                    />
+                    <div key={item._id}>
+                      <CustomCard
+                        key={item._id}
+                        name={item.model}
+                        picture={item.image}
+                        profile={item.description}
+                        dateEmployed={item.createdAt.slice(0, 10)}
+                        dateDesc="Date Procured"
+                      />
+                      <Divider />
+                    </div>
                   );
                 }
               })}
