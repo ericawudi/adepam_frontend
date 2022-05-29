@@ -75,7 +75,6 @@ function EditTeacherModal(props) {
   };
 
   React.useEffect(() => {
-    console.log(props.data);
     reset(props.data);
     setImage(props.data.image);
   }, [props.data]);
