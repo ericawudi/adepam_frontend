@@ -145,7 +145,6 @@ function Teacher() {
   const getData = async (route) => {
     setLoading(true);
     const resp = await GetList(route);
-    console.log({ resp });
     if (resp.status == 200) {
       setTeachers(resp.data);
     } else {
@@ -154,7 +153,6 @@ function Teacher() {
         severity: "error",
         open: true,
       });
-      console.log(`Errow fetching ${route} data`);
     }
     setLoading(false);
   };

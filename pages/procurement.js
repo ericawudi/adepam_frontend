@@ -128,7 +128,6 @@ function Procurement() {
   const getData = async (route) => {
     setLoading(true);
     const resp = await GetList(route);
-    console.log({ resp });
     if (resp.status == 200) {
       setItems(resp.data);
     } else {
@@ -137,7 +136,6 @@ function Procurement() {
         severity: "error",
         open: true,
       });
-      console.log(`Errow fetching ${route} data`);
     }
     setLoading(false);
   };

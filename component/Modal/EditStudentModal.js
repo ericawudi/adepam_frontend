@@ -64,11 +64,6 @@ function EditStudentModal(props) {
       level: data.level,
       image: image,
     };
-    console.log({ dataToSave });
-    // if (resp.status === 200) {
-    //   props.handleReRender();
-    //   setOpen(false);
-    // }
     setLoading(true);
     let message = "Student details successfully edited";
     let severity = "success";
