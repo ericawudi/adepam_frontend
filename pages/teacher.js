@@ -224,7 +224,7 @@ function Teacher() {
                 className={styles.button}
                 onClick={handleSelect}
               >
-                All Teachers
+                All
               </Button>
             </Grid>
           </Grid>

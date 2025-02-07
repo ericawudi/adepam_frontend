@@ -19,11 +19,9 @@ function DrawerMenu({ children }) {
 
   React.useEffect(() => {
     const handleStart = (url) => {
-      console.log(`Loading: ${url}`);
       setModalState(true);
     };
     const handleStop = () => {
-      console.log("done");
       setModalState(false);
     };
 

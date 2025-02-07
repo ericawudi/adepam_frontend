@@ -230,7 +230,7 @@ function Student() {
                 className={styles.button}
                 onClick={handleSelect}
               >
-                All Students
+                All
               </Button>
             </Grid>
           </Grid>

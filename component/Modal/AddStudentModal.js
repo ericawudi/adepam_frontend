@@ -62,7 +62,7 @@ function AddStudentModal(props) {
   const onSubmit = async (data) => {
     const studentData = { ...data, image: image };
     setLoading(true);
-    let message = "Teacher successfully created";
+    let message = "Student successfully created";
     let severity = "success";
     const resp = await CreateUser(studentData, "student");
     if (resp.status == 200) {
@@ -72,7 +72,7 @@ function AddStudentModal(props) {
       setSelectLevel(100);
       setSelectedStatus("active");
     } else {
-      message = "Error creating teacher.";
+      message = "Error creating student.";
       severity = "error";
     }
     props.handleNotification({

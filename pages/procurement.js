@@ -207,7 +207,7 @@ function Procurement() {
                 className={styles.button}
                 onClick={handleSelect}
               >
-                All Items
+                All
               </Button>
             </Grid>
           </Grid>

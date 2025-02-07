@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Grid } from "@mui/material";
+import { Divider, Grid, useMediaQuery } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -15,11 +15,12 @@ export default function Home() {
   const [studentData, setStudentData] = React.useState(null);
   const [teacherData, setTeacherData] = React.useState(null);
   const [procurementData, setProcurementData] = React.useState(null);
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   const getData = async (route) => {
     const resp = await GetList(route);
     console.log({ resp });
-    if (resp.status == 200) {
+    if (resp.status === 200) {
       switch (route) {
         case "student":
           setStudentData(resp.data);
@@ -34,174 +35,100 @@ export default function Home() {
           break;
       }
     } else {
-      console.log(`Errow fetching ${route} data`);
+      console.log(`Error fetching ${route} data`);
     }
   };
+
   React.useEffect(() => {
     getData("student");
-  }, []);
-  React.useEffect(() => {
     getData("teacher");
-  }, []);
-  React.useEffect(() => {
     getData("procure");
   }, []);
 
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>Adepam Dashboard</h1>
-      <Grid container spacing={2}>
-        <Grid item md={4}>
-          <Paper
-            elevation={10}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-            className={styles.teacherCard}
-          >
-            <CardContent className={styles.numbers}>
-              <Typography variant="h5" component="div">
-                <CountUp end={teacherData && teacherData.length} duration={1} />
-              </Typography>
-              <Typography variant="h5" component="div">
-                Number of Teachers
-              </Typography>
-            </CardContent>
-            <AdminPanelSettingsIcon
-              sx={{ fontSize: 100, color: "#7c43bda0" }}
-            />
-          </Paper>
-        </Grid>
-        <Grid item md={4}>
-          <Paper
-            elevation={10}
-            className={styles.studentCard}
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <CardContent className={styles.numbers}>
-              <Typography variant="h5" component="div">
-                <CountUp end={studentData && studentData.length} duration={1} />
-              </Typography>
-              <Typography variant="h5" component="div">
-                Number of Student
-              </Typography>
-            </CardContent>
-            <GroupsIcon sx={{ fontSize: 100, color: "#bcbcbc" }} />
-          </Paper>
-        </Grid>
-        <Grid item md={4}>
-          <Paper
-            elevation={10}
-            className={styles.procurementCard}
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <CardContent className={styles.numbers}>
-              <Typography variant="h5" component="div">
-                <CountUp
-                  end={procurementData && procurementData.length}
-                  duration={1}
-                />
-              </Typography>
-              <Typography variant="h5" component="div">
-                Procurement
-              </Typography>
-            </CardContent>
-            <PrecisionManufacturingIcon
-              sx={{ fontSize: 100, color: "#7c43bda0" }}
-            />
-          </Paper>
-        </Grid>
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        className={styles.grid}
+      >
+        {[
+          {
+            data: teacherData,
+            label: "Teachers",
+            icon: AdminPanelSettingsIcon,
+            className: styles.teacherCard,
+          },
+          {
+            data: studentData,
+            label: "Students",
+            icon: GroupsIcon,
+            className: styles.studentCard,
+          },
+          {
+            data: procurementData,
+            label: "Procurement",
+            icon: PrecisionManufacturingIcon,
+            className: styles.procurementCard,
+          },
+        ].map(({ data, label, icon: Icon, className }, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Paper
+              elevation={10}
+              className={className}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: 2,
+              }}
+            >
+              <CardContent className={styles.numbers}>
+                <Typography variant="h5" component="div">
+                  <CountUp end={data?.length || 0} duration={1} />
+                </Typography>
+                <Typography variant="h5" component="div">
+                  No. of {label}
+                </Typography>
+              </CardContent>
+              <Icon sx={{ fontSize: 80, color: "#ffffff" }} />
+            </Paper>
+          </Grid>
+        ))}
       </Grid>
-      <br />
-      <Grid container spacing={2}>
-        <Grid item md={4}>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            Latest Teachers
-          </Typography>
-          <Paper elevation={2}>
-            {teacherData &&
-              teacherData.map((teacher, index) => {
-                if (index < 5) {
-                  return (
-                    <div key={teacher._id}>
-                      <CustomCard
-                        name={teacher.name}
-                        picture={teacher.image}
-                        profile={teacher.profile}
-                        dateEmployed={teacher.createdAt.slice(0, 10)}
-                        dateDesc="Date Employed"
-                      />
-                      <Divider />
-                    </div>
-                  );
-                }
-              })}
-            <Divider />
-          </Paper>
-        </Grid>
-        <Grid item md={4}>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            Newest Students
-          </Typography>
-          <Paper elevation={2}>
-            {studentData &&
-              studentData.map((student, index) => {
-                if (index < 5) {
-                  return (
-                    <div key={student._id}>
-                      <CustomCard
-                        name={student.name}
-                        picture={student.image}
-                        profile={student.name}
-                        dateEmployed={student.createdAt.slice(0, 10)}
-                        dateDesc="Date Enrolled"
-                      />
-                      <Divider />
-                    </div>
-                  );
-                }
-              })}
-          </Paper>
-        </Grid>
-        <Grid item md={4}>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            Procurement
-          </Typography>
-          <Paper elevation={2}>
-            {procurementData &&
-              procurementData.map((item, index) => {
-                if (index < 5) {
-                  return (
-                    <div key={item._id}>
-                      <CustomCard
-                        key={item._id}
-                        name={item.model}
-                        picture={item.image}
-                        profile={item.description}
-                        dateEmployed={item.createdAt.slice(0, 10)}
-                        dateDesc="Date Procured"
-                      />
-                      <Divider />
-                    </div>
-                  );
-                }
-              })}
-            <Divider />
-          </Paper>
-        </Grid>
+
+      <Grid container spacing={2} justifyContent="center" mt={4}>
+        {[
+          { title: "Latest Teachers", data: teacherData },
+          { title: "Newest Students", data: studentData },
+          { title: "Procurement", data: procurementData },
+        ].map(({ title, data }, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Typography variant="subtitle1" color="text.secondary">
+              {title}
+            </Typography>
+            <Paper elevation={2}>
+              {data?.slice(0, 5).map((item) => (
+                <div key={item._id}>
+                  <CustomCard
+                    name={item.name || item.model}
+                    picture={item.image}
+                    profile={item.profile || item.description}
+                    dateEmployed={item.createdAt.slice(0, 10)}
+                    dateDesc={
+                      title.includes("Procurement")
+                        ? "Date Procured"
+                        : "Date Enrolled"
+                    }
+                  />
+                  <Divider />
+                </div>
+              ))}
+              <Divider />
+            </Paper>
+          </Grid>
+        ))}
       </Grid>
     </main>
   );

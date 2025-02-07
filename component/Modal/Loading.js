@@ -5,7 +5,7 @@ import styles from "../../styles/Loading.module.css";
 
 function Loading({ modelState = true }) {
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <div>
