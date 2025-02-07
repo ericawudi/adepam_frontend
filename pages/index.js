@@ -15,11 +15,11 @@ export default function Home() {
   const [studentData, setStudentData] = React.useState(null);
   const [teacherData, setTeacherData] = React.useState(null);
   const [procurementData, setProcurementData] = React.useState(null);
-  const isSmallScreen = useMediaQuery("(max-width:600px)");
+  // const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   const getData = async (route) => {
     const resp = await GetList(route);
-    console.log({ resp });
+    // console.log({ resp });
     if (resp.status === 200) {
       switch (route) {
         case "student":

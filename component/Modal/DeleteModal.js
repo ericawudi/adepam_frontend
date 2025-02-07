@@ -25,7 +25,7 @@ function DeleteModal(props) {
     setLoading(true);
     let message = "Record successfully deleted";
     let severity = "success";
-    const resp = await DeleteRecord(props.route, props.data[0]);
+    const resp = await DeleteRecord(props.route, props.data._id);
     if (resp.status == 200) {
       props.handleReRender();
     } else {

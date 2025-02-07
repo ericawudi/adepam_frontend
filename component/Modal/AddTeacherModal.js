@@ -89,9 +89,10 @@ function AddTeacherModal(props) {
                   variant="outlined"
                   name="name"
                   {...register("name", { required: true })}
-                  error={errors.fullname && true}
+                  error={errors.name && true}
                   autoFocus
                   fullWidth
+                  helperText={"full name is required"}
                 />
               </Grid>
               <Grid item sm={6}>
@@ -109,6 +110,7 @@ function AddTeacherModal(props) {
                     },
                   })}
                   error={errors.email && true}
+                  helperText={errors.email?.message}
                   fullWidth
                 />
               </Grid>
@@ -117,11 +119,18 @@ function AddTeacherModal(props) {
                   id="contact"
                   label="Contact No."
                   name="contact"
-                  type="number"
+                  type="tel"
                   fullWidth
                   variant="outlined"
-                  {...register("contact", { required: true })}
-                  error={errors.contact && true}
+                  {...register("contact", {
+                    required: "Contact number is required",
+                    pattern: {
+                      value: /^[0-9]{10}$/, // Adjust length if needed
+                      message: "Enter a valid 10-digit mobile number",
+                    },
+                  })}
+                  error={Boolean(errors.contact)}
+                  helperText={errors.contact?.message}
                 />
               </Grid>
               <Grid item sm={6}>
@@ -133,7 +142,8 @@ function AddTeacherModal(props) {
                   fullWidth
                   variant="outlined"
                   {...register("subject", { required: true })}
-                  error={errors.contact && true}
+                  error={errors.subject && true}
+                  helperText={"subject is required"}
                 />
               </Grid>
               <Grid item sm={6}>

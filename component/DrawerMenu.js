@@ -4,9 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
-import { useRouter } from "next/router";
 import Header from "./Header";
-import Loading from "./Modal/Loading";
 import style from "../styles/Drawer.module.css";
 import Routes from "./Routes";
 
@@ -14,27 +12,6 @@ const drawerWidth = 240;
 
 function DrawerMenu({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [modalState, setModalState] = React.useState(false);
-  const router = useRouter();
-
-  React.useEffect(() => {
-    const handleStart = (url) => {
-      setModalState(true);
-    };
-    const handleStop = () => {
-      setModalState(false);
-    };
-
-    router.events.on("routeChangeStart", handleStart);
-    router.events.on("routeChangeComplete", handleStop);
-    router.events.on("routeChangeError", handleStop);
-
-    return () => {
-      router.events.off("routeChangeStart", handleStart);
-      router.events.off("routeChangeComplete", handleStop);
-      router.events.off("routeChangeError", handleStop);
-    };
-  }, [router]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -111,7 +88,7 @@ function DrawerMenu({ children }) {
         }}
       >
         <Toolbar />
-        {modalState ? <Loading modalState={modalState} /> : children}
+        {children}
       </Box>
     </Box>
   );
